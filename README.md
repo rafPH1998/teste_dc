@@ -1,52 +1,103 @@
+# Teste DC — Cadastro de vendas e personalização de parcelas
 
-# Setup Docker Laravel 11 com PHP 8.3
-[Assine a Academy, e Seja VIP!](https://academy.especializati.com.br)
+Aplicação web em **Laravel 12** para cadastro de **clientes**, registro de **vendas** (itens, forma de pagamento e parcelas), **login** com vendedor vinculado à venda, **filtros** na listagem e **exportação do resumo em PDF**. Interface com **Bootstrap 5** e **jQuery** (CDN).
 
-### Passo a passo
-Clone Repositório
-```sh
-git clone -b laravel-12-with-php8.4 https://github.com/especializati/setup-docker-laravel.git app-laravel
-```
-```sh
-cd app-laravel
-```
+## Requisitos
 
-Suba os containers do projeto
-```sh
-docker-compose up -d
+- Docker version 29.3.0
+
+## Instalação e passo a passo para rodar o projeto
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/rafPH1998/teste_dc.git
 ```
 
+Entre na pasta do projeto:
 
-Crie o Arquivo .env
-```sh
+```bash
+cd teste-dc
+```
+
+Crie o Arquivo .env:
+
+```bash
 cp .env.example .env
 ```
 
-Acesse o container app
-```sh
-docker-compose exec app bash
+Ajuste o **`.env`** OBS: (Por ser um projeto de teste, abaixo esta as credencias do env):
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=teste_dc
+DB_USERNAME=root
+DB_PASSWORD=root
 ```
 
+Suba os containers do projeto:
 
-Instale as dependências do projeto
-```sh
+```bash
+docker compose up -d
+```
+
+Caso gere um erro de permissao, é importante que o ID seja o mesmo que está definido no Dockerfile:
+
+![alt text](image.png)
+
+
+Acessar o container:
+
+```bash
+docker compose exec app bash
+```
+
+Instale as dependências PHP:
+
+```bash
 composer install
 ```
 
-Gere a key do projeto Laravel
-```sh
+Configure o ambiente:
+
+```bash
 php artisan key:generate
 ```
 
-OPCIONAL: Gere o banco SQLite (caso não use o banco MySQL)
-```sh
-touch database/database.sqlite
+Rode as migrations com o seed de demonstração:
+
+```bash
+php artisan migrate:fresh --seed
 ```
 
-Rodar as migrations
-```sh
-php artisan migrate
+O seed cria usuário demo, formas de pagamento, produtos de exemplo e dados auxiliares.
+
+## Acessar projeto
+
+```bash
+http://localhost:8001/login
 ```
 
-Acesse o projeto
-[http://localhost:8000](http://localhost:8000)
+### Login de demonstração
+
+| Campo   | Valor                 |
+|---------|-----------------------|
+| E-mail  | `vendedor@teste.local` |
+| Senha   | `senha123`            |
+
+
+## Estrutura principal
+
+- **Rotas:** `routes/web.php`
+- **Controllers:** `app/Http/Controllers/`
+- **Services (regras de negócio):** `app/Services/` — classes `*Service`
+- **Models:** `app/Models/`
+- **Views:** `resources/views/`
+- **Logo:** `public/logo-dc/logo-dc.png`
+
+## PDF
+
+O resumo da venda usa **DomPDF** (`barryvdh/laravel-dompdf`). A rota `GET /vendas/{id}/pdf` exibe o PDF no navegador (somente vendas do usuário logado).
+
