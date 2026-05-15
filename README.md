@@ -17,7 +17,13 @@ git clone https://github.com/rafPH1998/teste_dc.git
 Entre na pasta do projeto:
 
 ```bash
-cd teste-dc
+cd teste_dc
+```
+
+Acesse o projeto:
+
+```bash
+code .
 ```
 
 Crie o Arquivo .env:
